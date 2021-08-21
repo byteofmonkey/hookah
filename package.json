@@ -49,9 +49,6 @@
         "not Explorer <= 11"
     ],
     "dependencies": {
-        "@glidejs/glide": "^3.4.1",
-        "@popperjs/core": "^2.9.2",
-        "bootstrap": "^4.6.0",
-        "jquery": "^3.5.1"
+        "@glidejs/glide": "^3.4.1"
     }
 }
