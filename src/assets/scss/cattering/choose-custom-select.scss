@@ -1,6 +1,6 @@
 @media screen and (max-width: 767.98px) {
 
-    .custom-select-container {
+    .custom-select-cattering {
         position: relative;
         z-index: 2;
         border-radius: 5px;
@@ -48,22 +48,20 @@
         }
 
         &.is-open .custom-select-panel {
-            padding-top: 25px;
-            padding-bottom: 20px;
-            max-height: unset;
-            overflow-y: auto;
-            //   max-height: 10.7em;
+            overflow-y: hidden;
+            max-height: 360px;
         }
 
         .custom-select-panel {
             max-height: 0;
             padding-right: 15px;
             padding-left: 15px;
-            transition: max-height .5s ease-out, overflow-y 0.1s 0.5s;
+            transition: max-height .2s ease-out;
             overflow: hidden;
 
             background-color: $white;
             border-radius: 0 0 5px 5px;
+            user-select: none;
 
             margin-top: -5px;
             position: absolute;
@@ -83,6 +81,18 @@
 
             &:first-of-type {
                 display: none;
+            }
+
+            &:nth-of-type(2) {
+                padding-top: 58px;
+
+                &::before {
+                    padding-top: 25px;
+                }
+            }
+
+            &:last-of-type {
+                margin-bottom: 20px;
             }
 
             &::before {
@@ -116,7 +126,7 @@
 
 
 @media screen and (min-width: 768px) {
-    .custom-select-container {
+    .custom-select-cattering {
         select {
             visibility: hidden;
             position: absolute;
@@ -173,6 +183,7 @@
         font-family: "Montserrat";
         font-size: 14px;
         line-height: 1.4;
+        color: transparent;
 
         @keyframes clr {
             0% {
@@ -193,7 +204,7 @@
 }
 
 @media screen and (min-width: 1200px) {
-    .custom-select-container {
+    .custom-select-cattering {
         .custom-select-panel {
             display: grid;
             grid-template-columns: repeat(4, 1fr) 1.8fr;
