@@ -2,9 +2,7 @@ import Glide from '@glidejs/glide';
 import customSelect from 'custom-select';
 // https://github.com/custom-select/custom-select
 
-// import Accordion from 'accordion-js';
 // import Inputmask from "inputmask";
-// import LazyLoad from 'lazyload';
 
 import Modal from './modules/modal';
 
@@ -71,7 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // обновления на breakpoint:
     const option = document.querySelector('.choose .custom-select-option:last-of-type');
 
-    const handler768 = () => (mediaQueryList768.matches) ? option.dataset.value = '15 & more hookahs' : option.dataset.value = '15 & more';
+    const handler768 = () => {
+      if (mediaQueryList768.matches) {
+        option.dataset.value = '15 & more hookahs';
+      } else {
+        option.dataset.value = '15 & more';
+      }
+    };
     const mediaQueryList768 = window.matchMedia(`screen and (max-width: 767.98px)`);
     if (!mediaQueryList768.matches) document.querySelectorAll('.choose .custom-select-option')[1].click();
     mediaQueryList768.addEventListener('change', handler768);
@@ -80,7 +84,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const mediaQueryList1200 = window.matchMedia(`screen and (max-width: 1200px`);
     (mediaQueryList1200.matches) ? option.dataset.value = '15 & more': option.dataset.value = '15 & more hookahs';
     mediaQueryList1200.addEventListener('change', handler1200);
+
+
+
+    const options = document.querySelectorAll('.choose .custom-select-option');
+    options.forEach(item => item.setAttribute('tabindex', 0));
+
+    // let onEnter = null;
+    // options.forEach(item => item.addEventListener('focus', function() {
+    //   onEnter = (e) => {
+    //     (e.code === 'Enter') && this.click();
+    //     console.log("adsf");
+    //   }
+    //   document.addEventListener('keydown', onEnter.bind(this));
+    // }));
+    // options.forEach(item => item.addEventListener('blur', function() {
+    //   this.removeEventListener('keydown', onEnter);
+    // }));
+
   }
+
+  // date-time:
+  document.querySelectorAll('[data-date-time]').forEach(item => item.addEventListener('click', function() {
+    this.setAttribute('type', 'datetime-local');
+  }));
 
   // setting up scripts for exact page as needed:
   const isCutteringPage = document.querySelector('.cattering');
@@ -89,6 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
     setCutteringForm();
   } else {
     setSlider();
+    document.querySelectorAll('[data-logo]').forEach(item => {
+      item.style.cursor = 'default';
+      item.addEventListener('click', (e) => e.preventDefault());
+    })
   }
 
   new Modal(['order', 'cattering', 'thanks', 'error']);
@@ -97,14 +128,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const dropTrigger = document.querySelectorAll('.modal-order__dropDown-trigger');
   dropTrigger.forEach(item => {
     item.addEventListener('click', function() {
-      this.closest('.modal-order__dropDown').classList.toggle('open');
+      const dropDown = this.closest('.modal-order__dropDown');
+      dropDown.classList.toggle('open');
+      const inputs = dropDown.querySelectorAll('input');
+      if (dropDown.classList.contains('open')) {
+        inputs.forEach(item => item.setAttribute('tabindex', 0));
+        dropDown.setAttribute('aria-expanded', true);
+      } else {
+        inputs.forEach(item => item.setAttribute('tabindex', -1));
+        dropDown.setAttribute('aria-expanded', false);
+      }
     });
-  })
-
-  // date-time:
-  document.querySelectorAll('[data-date-time]').forEach(item => item.addEventListener('click', function() {
-    this.setAttribute('type', 'datetime-local');
-  }))
+  });
 
   // data-next:
   const nextBtn = document.querySelector('[data-next]');
@@ -113,7 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // modal steps change:
   nextBtn.addEventListener('click', function() {
-    firstStep.forEach(item => item.style.display = 'none');
-    lastStep.forEach(item => item.style.display = 'block');
+    const isValid = this.closest('form').reportValidity();
+    if (isValid) {
+      firstStep.forEach(item => item.style.display = 'none');
+      lastStep.forEach(item => item.style.display = 'block');
+    }
   })
+
 })

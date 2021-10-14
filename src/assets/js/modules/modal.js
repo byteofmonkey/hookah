@@ -1,14 +1,19 @@
 import axios from 'axios';
+// https://github.com/custom-select/custom-select
 import customSelect from 'custom-select';
+// https://www.npmjs.com/package/focus-trap
+import * as focusTrap from 'focus-trap'
 
 
 class Modal {
   constructor(selectors) {
-    this.tanksModal = document.querySelector('.modal_thanks');
+    this.tanksModal = document.querySelector('[data-modal-thanks]');
     this.errorModal = document.querySelector('[data-modal-error]');
     this.closeBtns = document.querySelectorAll('[data-close]');
     this.forms = document.querySelectorAll('form');
     this.allModals = this.getModals(selectors);
+
+    this.trap = focusTrap.createFocusTrap(this.allModals);
 
     this.selectedForm = null;
     this.selectsContainer = document.querySelector('.modal-order__flavours');
@@ -32,12 +37,12 @@ class Modal {
           // check if form the same to prevent selected items from clear up:
           (set) && (this.selectedForm !== set) && this.createForm(this.selectedForm = set);
 
+          this.trap.activate();
+
           if (item === 'order') {
             // reset steps:
-            const step1 = document.querySelectorAll('.modal-order__step1');
-            const step2 = document.querySelectorAll('.modal-order__step2');
-            step1.forEach(item => item.style = "");
-            step2.forEach(item => item.style = "");
+            document.querySelectorAll('.modal-order__step1').forEach(item => item.style = "");
+            document.querySelectorAll('.modal-order__step2').forEach(item => item.style = "");
           }
 
           document.body.style.overflow = 'hidden';
@@ -77,7 +82,7 @@ class Modal {
         const selected = document.querySelector('#cattering-select').value || 'not selected';
         const time = document.querySelector('input[type="range"]').value;
         formData.append('hookah quantity', selected);
-        formData.append('event duration', time);
+        formData.append('event duration', `${time} hours`);
       }
 
       form.reset();
@@ -88,15 +93,21 @@ class Modal {
           if (res.status === 200) {
             this.closeModal();
             this.tanksModal.classList.add('open');
+            this.trap.activate();
+            document.body.style.overflow = 'hidden';
           } else {
             this.closeModal();
             this.errorModal.classList.add('open');
+            this.trap.activate();
+            document.body.style.overflow = 'hidden';
           }
         })
         .catch(error => {
           this.closeModal();
           console.log(error);
           this.errorModal.classList.add('open');
+          this.trap.activate();
+          document.body.style.overflow = 'hidden';
         });
     });
   }
@@ -105,6 +116,7 @@ class Modal {
     document.body.style.overflow = '';
     document.body.style.cursor = "";
     this.allModals.forEach(item => (item) && item.classList.remove('open'));
+    this.trap.deactivate();
   }
 
   createForm(set) {
