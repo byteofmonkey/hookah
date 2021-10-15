@@ -22,7 +22,7 @@ class Modal {
 
     // binding:
     this.onOverlay = this.onOverlay.bind(this);
-    this.onEsc = this.onEsc.bind(this);
+    this.onKeyboard = this.onKeyboard.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.createForm = this.createForm.bind(this);
 
@@ -51,13 +51,24 @@ class Modal {
     });
 
     this.closeBtns.forEach(item => item.addEventListener('click', this.closeModal));
-    document.addEventListener('keydown', this.onEsc);
+    document.addEventListener('keydown', this.onKeyboard);
     this.allModals.forEach(item => item.addEventListener('click', this.onOverlay));
     this.forms.forEach(item => this.bindPostData(item));
+
+    // focus management - select (form - choose):
+    const chooseOptions = document.querySelectorAll('.choose .custom-select-option');
+    chooseOptions.forEach(item => item.setAttribute('tabindex', 0));
+    chooseOptions.forEach(item => item.addEventListener('focus', function() {
+      this.classList.add('choose-selected');
+    }));
+    chooseOptions.forEach(item => item.addEventListener('blur', function() {
+      this.classList.remove('choose-selected');
+    }));
   }
 
-  onEsc(e) {
-    (e.code === 'Escape') && this.closeModal();
+  onKeyboard(e) {
+    e.code === 'Escape' && this.closeModal();
+    e.code === 'Enter' && e.target.classList.contains('choose-selected') && e.target.click();
   }
 
   onOverlay(e) {

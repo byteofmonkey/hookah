@@ -2,8 +2,6 @@ import Glide from '@glidejs/glide';
 import customSelect from 'custom-select';
 // https://github.com/custom-select/custom-select
 
-// import Inputmask from "inputmask";
-
 import Modal from './modules/modal';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -84,24 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mediaQueryList1200 = window.matchMedia(`screen and (max-width: 1200px`);
     (mediaQueryList1200.matches) ? option.dataset.value = '15 & more': option.dataset.value = '15 & more hookahs';
     mediaQueryList1200.addEventListener('change', handler1200);
-
-
-
-    const options = document.querySelectorAll('.choose .custom-select-option');
-    options.forEach(item => item.setAttribute('tabindex', 0));
-
-    // let onEnter = null;
-    // options.forEach(item => item.addEventListener('focus', function() {
-    //   onEnter = (e) => {
-    //     (e.code === 'Enter') && this.click();
-    //     console.log("adsf");
-    //   }
-    //   document.addEventListener('keydown', onEnter.bind(this));
-    // }));
-    // options.forEach(item => item.addEventListener('blur', function() {
-    //   this.removeEventListener('keydown', onEnter);
-    // }));
-
   }
 
   // date-time:
